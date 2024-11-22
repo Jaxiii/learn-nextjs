@@ -18,24 +18,24 @@ export default async function InvoicesTable({
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {invoices?.map((invoice) => (
+            {invoices?.map((invoice, index) => (
               <div
-                key={invoice.id}
+                key={`${invoice.customer_id}-${index}`} // Ensure the key is unique
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
                       <Image
-                        src={invoice.image_url}
+                        src={invoice.customer?.image_url || '/placeholder.png'}
                         className="mr-2 rounded-full"
                         width={28}
                         height={28}
-                        alt={`${invoice.name}'s profile picture`}
+                        alt={`${invoice.customer?.name || 'Customer'}'s profile picture`}
                       />
-                      <p>{invoice.name}</p>
+                      <p>{invoice.customer?.name}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{invoice.email}</p>
+                    <p className="text-sm text-gray-500">{invoice.customer?.email}</p>
                   </div>
                   <InvoiceStatus status={invoice.status} />
                 </div>
@@ -47,8 +47,8 @@ export default async function InvoicesTable({
                     <p>{formatDateToLocal(invoice.date)}</p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateInvoice id={invoice.id} />
-                    <DeleteInvoice id={invoice.id} />
+                    <UpdateInvoice id={invoice.customer_id} />
+                    <DeleteInvoice id={invoice.customer_id} />
                   </div>
                 </div>
               </div>
@@ -78,25 +78,25 @@ export default async function InvoicesTable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {invoices?.map((invoice) => (
+              {invoices?.map((invoice, index) => (
                 <tr
-                  key={invoice.id}
+                  key={`${invoice.customer_id}-${index}`} // Ensure the key is unique
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
                       <Image
-                        src={invoice.image_url}
+                        src={invoice.customer?.image_url || '/placeholder.png'}
                         className="rounded-full"
                         width={28}
                         height={28}
-                        alt={`${invoice.name}'s profile picture`}
+                        alt={`${invoice.customer?.name || 'Customer'}'s profile picture`}
                       />
-                      <p>{invoice.name}</p>
+                      <p>{invoice.customer?.name}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {invoice.email}
+                    {invoice.customer?.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(invoice.amount)}
@@ -109,8 +109,8 @@ export default async function InvoicesTable({
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateInvoice id={invoice.id} />
-                      <DeleteInvoice id={invoice.id} />
+                      <UpdateInvoice id={invoice.customer_id} />
+                      <DeleteInvoice id={invoice.customer_id} />
                     </div>
                   </td>
                 </tr>
